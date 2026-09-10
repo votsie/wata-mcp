@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "wata": {
+      "command": "node",
+      "args": [
+        "dist/server.js"
+      ]
+    }
+  }
+}

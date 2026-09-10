@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Нужна вся история: секрет, удалённый последним коммитом, всё равно остаётся в ней.
+          fetch-depth: 0
+      - name: Проверка на утечку секретов
+        run: |
+          # Репозиторий публичный: ни куки, ни токены, ни учётные данные не должны
+          # попасть ни в рабочее дерево, ни в историю коммитов.
+          PATTERN='CfDJ8[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(WATA_PASSWORD|WATA_ACQ_TOKEN|WATA_COOKIE|WATA_EMAIL)=[^[:space:]"'"'"']+'
+          EXCLUDE=':!*.example' ':!.github/workflows/ci.yml'
+
+          echo "Рабочее дерево..."
+          if git grep -nE "$PATTERN" -- . $EXCLUDE; then
+            echo "::error::Найдены значения, похожие на секреты, в рабочем дереве"
+            exit 1
+          fi
+
+          echo "История коммитов..."
+          if git grep -nE "$PATTERN" $(git rev-list --all) -- . $EXCLUDE; then
+            echo "::error::Найдены значения, похожие на секреты, в истории коммитов"
+            exit 1
+          fi
+
+          echo "Секретов не найдено"

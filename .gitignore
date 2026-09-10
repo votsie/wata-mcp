@@ -1,0 +1,38 @@
+# --- Секреты: репозиторий ПУБЛИЧНЫЙ, ничего из этого не должно попасть в git ---
+.env
+.env.*
+!.env.example
+*.cookie
+*.cookies
+cookies.txt
+session.json
+.wata/
+.wata-mcp/
+secrets/
+*.pem
+*.key
+
+# --- Сборка / зависимости ---
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# --- Логи и временное ---
+*.log
+npm-debug.log*
+.cache/
+tmp/
+.DS_Store
+Thumbs.db
+
+# --- Локальные конфиги агентов (могут содержать креды) ---
+.mcp.local.json
+.claude/settings.local.json
+
+# --- Служебные каталоги инструментов ---
+.omc/
+.playwright-mcp/
+.remember/
+dist-test/

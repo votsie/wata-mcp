@@ -1,0 +1,7 @@
+{
+  // Тесты компилируются отдельно, чтобы не засорять dist, который уходит в npm.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist-test"
+  }
+}
