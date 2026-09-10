@@ -30,16 +30,21 @@ jobs:
           # Репозиторий публичный: ни куки, ни токены, ни учётные данные не должны
           # попасть ни в рабочее дерево, ни в историю коммитов.
           PATTERN='CfDJ8[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(WATA_PASSWORD|WATA_ACQ_TOKEN|WATA_COOKIE|WATA_EMAIL)=[^[:space:]"'"'"']+'
-          EXCLUDE=':!*.example' ':!.github/workflows/ci.yml'
+
+          # Массив, а не строка: pathspec-исключения содержат ":!" и при подстановке
+          # обычной переменной bash пытается выполнить их как отдельную команду.
+          EXCLUDE=(':!*.example' ':!.github/workflows/ci.yml')
 
           echo "Рабочее дерево..."
-          if git grep -nE "$PATTERN" -- . $EXCLUDE; then
+          if git grep -nE "$PATTERN" -- . "${EXCLUDE[@]}"; then
             echo "::error::Найдены значения, похожие на секреты, в рабочем дереве"
             exit 1
           fi
 
           echo "История коммитов..."
-          if git grep -nE "$PATTERN" $(git rev-list --all) -- . $EXCLUDE; then
+          # git grep по всем коммитам: секрет, удалённый последним коммитом,
+          # всё равно остаётся в истории публичного репозитория.
+          if git grep -nE "$PATTERN" $(git rev-list --all) -- . "${EXCLUDE[@]}"; then
             echo "::error::Найдены значения, похожие на секреты, в истории коммитов"
             exit 1
           fi
