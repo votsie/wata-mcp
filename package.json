@@ -27,7 +27,6 @@
     "платежи",
     "merchant",
     "payouts",
-    "claude",
     "ai-agent"
   ],
   "bin": {

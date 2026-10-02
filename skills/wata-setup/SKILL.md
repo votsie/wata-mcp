@@ -9,7 +9,7 @@ description: Установка и подключение WATA MCP к агент
 
 ```bash
 npm install && npm run build
-node dist/cli.js install     # пропишет сервер в Claude Code, Codex, Antigravity
+node dist/cli.js install     # пропишет сервер в Codex и Antigravity
 ```
 
 `install` правит только запись `wata` и сохраняет остальные настройки пользователя.

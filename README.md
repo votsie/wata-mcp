@@ -5,7 +5,7 @@ MCP-сервер и набор скиллов, дающие AI-агенту до
 терминалы, транзакции, чарджбеки, поддержка) и публичному API эквайринга и
 цифровых товаров.
 
-Работает в Claude Code, OpenAI Codex CLI и Google Antigravity — устанавливается
+Работает в OpenAI Codex CLI и Google Antigravity — устанавливается
 одной командой. Транспорт только stdio, отдельного HTTP-сервера нет.
 
 ## Зачем это нужно
@@ -35,7 +35,6 @@ node dist/cli.js install
 
 | Агент | Файл конфигурации |
 |---|---|
-| Claude Code | `.mcp.json` в корне репозитория |
 | OpenAI Codex CLI | `~/.codex/config.toml`, секция `[mcp_servers.wata]` |
 | Google Antigravity | `~/.gemini/config/mcp_config.json` |
 
